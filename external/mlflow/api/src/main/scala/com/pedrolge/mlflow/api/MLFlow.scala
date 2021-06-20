@@ -3,20 +3,20 @@ package com.pedrolge.mlflow.api
 import akka.NotUsed
 import akka.util.ByteString
 import com.lightbend.lagom.scaladsl.api.Service.{named, restCall}
-import com.lightbend.lagom.scaladsl.api.deser.{DefaultExceptionSerializer, ExceptionSerializer, RawExceptionMessage}
+import com.lightbend.lagom.scaladsl.api.deser.{DefaultExceptionSerializer, RawExceptionMessage}
 import com.lightbend.lagom.scaladsl.api.transport._
 import com.lightbend.lagom.scaladsl.api.{CircuitBreaker, Descriptor, Service, ServiceCall}
 import com.pedrolge.mlflow.api.MLFlow.{MLFlowExceptionSerializer, ResourceAlreadyExistsException, ResourceDoesNotExistException}
+import com.pedrolge.mlflow.api.model.artifact.Response._
 import com.pedrolge.mlflow.api.model.experiment.Request._
 import com.pedrolge.mlflow.api.model.experiment.Response._
-import com.pedrolge.mlflow.api.model.run.Request._
-import com.pedrolge.mlflow.api.model.run.Response._
+import com.pedrolge.mlflow.api.model.metric.Response._
 import com.pedrolge.mlflow.api.model.modelVersion.Request._
 import com.pedrolge.mlflow.api.model.modelVersion.Response._
 import com.pedrolge.mlflow.api.model.registeredModel.Request._
 import com.pedrolge.mlflow.api.model.registeredModel.Response._
-import com.pedrolge.mlflow.api.model.artifact.Response._
-import com.pedrolge.mlflow.api.model.metric.Response._
+import com.pedrolge.mlflow.api.model.run.Request._
+import com.pedrolge.mlflow.api.model.run.Response._
 import com.pedrolge.mlflow.api.model.{MLFlowFormatter, ViewType}
 import play.api.Environment
 import play.api.libs.json.{JsString, Json, OFormat}

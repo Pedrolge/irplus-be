@@ -6,12 +6,11 @@ import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.pedrolge.experiment.api.ExperimentService
 import com.pedrolge.experiment.impl.auth.{AuthComponent, AuthConfig}
+import com.pedrolge.experiment.impl.repo.{ApiTokenRepository, PostgresComponent, UserRepository}
 import com.pedrolge.mlflow.api.MLFlowComponent
 import com.softwaremill.macwire._
 import org.pac4j.core.config.Config
 import play.api.libs.ws.ahc.AhcWSComponents
-
-import scala.concurrent.Future
 
 
 class ExperimentLoader extends LagomApplicationLoader {
@@ -32,15 +31,21 @@ abstract class ExperimentApplication(context: LagomApplicationContext)
     with AhcWSComponents
     with OperationRegistry
     with ExperimentComponent
-    with AuthComponent
+    with PostgresComponent
     with MLFlowComponent {
 
   // configs
   val authConfig: AuthConfig = AuthConfig.readConfig
-  val securityConfig: Config = this.getSecurityConfig
+
+  // repos
+  val userRepository: UserRepository = wire[UserRepository]
+  val apiTokenRepository: ApiTokenRepository = wire[ApiTokenRepository]
+
+//  this.runDBSetup()
 
 
   // Bind the service that this server provides
   override lazy val lagomServer: LagomServer = serverFor[ExperimentService](wire[ExperimentServiceImpl])
 
 }
+

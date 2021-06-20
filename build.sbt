@@ -13,12 +13,18 @@ val lagomPac4j = "org.pac4j" %% "lagom-pac4j" % "2.2.1"
 val pac4jOidc = "org.pac4j" % "pac4j-oidc" % pac4jVersion
 val pac4jHttp = "org.pac4j" % "pac4j-http" % pac4jVersion
 val pac4jJwt = "org.pac4j" % "pac4j-jwt" % pac4jVersion
+val pac4jSql = "org.pac4j" % "pac4j-sql" % pac4jVersion
 
 val nimbusJoseJwt = "com.nimbusds" % "nimbus-jose-jwt" % "6.0"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.3" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.1.1" % Test
 val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.16.0"
 val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % "3.9.3"
+
+val slick = "com.typesafe.slick" %% "slick" % "3.3.3"
+val slickHikari = "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3"
+val postgresDriver = "org.postgresql" % "postgresql" % "9.4-1206-jdbc42"
+val hasher = "com.roundeights" %% "hasher" % "1.2.0"
 
 lazy val `irplus-be` = (project in file("."))
   .aggregate(`experiment-api`, `experiment-impl`, `mlflow-api`)
@@ -49,6 +55,7 @@ lazy val `experiment-impl` = (project in file("experiment-impl"))
     libraryDependencies ++= Seq(
       pac4jHttp,
       pac4jJwt,
+      pac4jSql,
       lagomPac4j,
       nimbusJoseJwt,
       pac4jOidc,
@@ -56,7 +63,11 @@ lazy val `experiment-impl` = (project in file("experiment-impl"))
       macwire,
       pureConfig,
       scalaTest,
-      scalaLogging
+      scalaLogging,
+      slick,
+      slickHikari,
+      postgresDriver,
+      hasher
     )
   )
   .settings(lagomForkedTestSettings)

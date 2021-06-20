@@ -4,6 +4,7 @@ import akka.NotUsed
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{CircuitBreaker, Descriptor, Service, ServiceCall}
 import com.pedrolge.experiment.api.model.EmptyResponse
+import com.pedrolge.experiment.api.model.auth.{CreateTokenRequest, CreateTokenResponse, ListTokenResponse}
 import com.pedrolge.mlflow.api.MLFlow.{MLFlowExceptionSerializer, ResourceAlreadyExistsException, ResourceDoesNotExistException}
 import com.pedrolge.mlflow.api.model.ViewType
 import com.pedrolge.mlflow.api.model.artifact.Response.ListArtifactsResponse
@@ -28,6 +29,9 @@ object ExperimentService  {
   * consume the IrplusbeService.
   */
 trait ExperimentService extends Service {
+
+  def createToken(): ServiceCall[CreateTokenRequest, CreateTokenResponse]
+  def listToken(): ServiceCall[NotUsed, ListTokenResponse]
 
   def createExperiment(): ServiceCall[CreateExperimentRequest, CreateExperimentResponse]
   def listExperiment(viewType: ViewType.Value): ServiceCall[NotUsed, ListExperimentResponse]
@@ -81,6 +85,11 @@ trait ExperimentService extends Service {
     // @formatter:off
     named("irplus-be")
       .withCalls(
+
+        // AUTH
+        restCall(Method.POST, "/api/auth/token", createToken _),
+        restCall(Method.GET, "/api/auth/token", listToken _),
+
         // EXPERIMENTS
         restCall(Method.POST, "/api/2.0/mlflow/experiments/create", createExperiment _),
         restCall(Method.GET, "/api/2.0/mlflow/experiments/list?view_type", listExperiment _),

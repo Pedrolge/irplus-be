@@ -6,15 +6,16 @@ import pureconfig.generic.auto._
 
 
 case class AuthConfig(
-                     keycloak: KeycloakConfig,
-                     authenticator: Config
+                       defaultClient: String,
+                       fallbackClient: Option[String],
+                       jwtClientConfig: JwtClientConfig,
                      )
 
-
-case class KeycloakConfig(
-                           clientId: String,
-                           clientName: String
-                         )
+case class JwtClientConfig(
+                            clientName: String,
+                            clientId: String,
+                            authenticator: Config
+                          )
 
 
 object AuthConfig {

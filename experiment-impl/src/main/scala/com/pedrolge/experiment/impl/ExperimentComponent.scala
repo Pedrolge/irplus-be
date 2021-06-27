@@ -5,7 +5,7 @@ import com.pedrolge.experiment.impl.operation.experiment._
 import com.pedrolge.experiment.impl.operation.run._
 import com.pedrolge.experiment.impl.operation.metric._
 import com.pedrolge.experiment.impl.operation.artifact._
-import com.pedrolge.experiment.impl.operation.auth.{CreateTokenOperation, ListTokenOperation}
+import com.pedrolge.experiment.impl.operation.auth.{CreateTokenOperation, DeleteTokenOperation, ListTokenOperation}
 import com.pedrolge.experiment.impl.operation.modelVersion._
 import com.pedrolge.experiment.impl.operation.registeredModel._
 import com.softwaremill.macwire.wire
@@ -15,6 +15,7 @@ trait ExperimentComponent
     with OperationRegistry {
 
 
+  final lazy val deleteTokenOperation = wire[DeleteTokenOperation]
   final lazy val createTokenOperation = wire[CreateTokenOperation]
   final lazy val listTokenOperation = wire[ListTokenOperation]
 

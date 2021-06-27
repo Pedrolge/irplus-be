@@ -5,7 +5,6 @@ import com.pedrolge.experiment.api.model.auth.{ApiKey, CreateTokenRequest, Creat
 import com.pedrolge.experiment.impl.repo.ApiTokenRepository
 import com.pedrolge.experiment.impl.repo.ApiTokenRepository.ApiToken
 import com.typesafe.scalalogging.Logger
-import org.postgresql.util.PSQLException
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -17,6 +16,7 @@ class CreateTokenOperation(apiTokenRepository: ApiTokenRepository) {
     val token = ApiToken.generateToken
     val apiToken = ApiToken(userId, request.tokenName, token)
 
+
     for {
       _ <- apiTokenRepository
         .create(apiToken)
@@ -25,7 +25,7 @@ class CreateTokenOperation(apiTokenRepository: ApiTokenRepository) {
           Done
         }
     } yield {
-      CreateTokenResponse(ApiKey(request.tokenName, token))
+      CreateTokenResponse(ApiKey(request.tokenName, apiToken.prefix, token))
     }
   }
 }

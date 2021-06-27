@@ -5,7 +5,7 @@ import play.api.libs.json.{Json, OFormat}
 
 package object auth {
 
-  case class ApiKey(tokenName: String, token: String)
+  case class ApiKey(tokenName: String, prefix: String, token: String)
 
   object ApiKey extends MLFlowFormatter {
     implicit val format: OFormat[ApiKey] = Json.format
@@ -34,6 +34,5 @@ package object auth {
   object ListTokenResponse extends MLFlowFormatter {
     implicit val format: OFormat[ListTokenResponse] = Json.format
   }
-
 
 }

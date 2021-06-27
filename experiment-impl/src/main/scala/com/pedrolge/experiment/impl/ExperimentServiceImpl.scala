@@ -40,6 +40,24 @@ class ExperimentServiceImpl(val operationRegistry: OperationRegistry,
 
   val logger: Logger = Logger(classOf[ExperimentServiceImpl])
 
+  override def deleteToken(tokenName: String): ServiceCall[NotUsed, EmptyResponse] = {
+    authorize(requireAnyRole[CommonProfile]("operator"), (profile: CommonProfile) =>
+      ServerServiceCall {
+        (_, _: NotUsed) =>
+          operationRegistry
+            .deleteTokenOperation
+            .process(profile.getId, tokenName)
+            .map { _ =>
+              (ResponseHeader.Ok, EmptyResponse())
+            }
+            .recover {
+              case _: PSQLException =>
+                throw Conflict("A token with this name already exists")
+            }
+      }
+    )
+  }
+
   override def createToken(): ServiceCall[CreateTokenRequest, CreateTokenResponse] = {
     authorize(requireAnyRole[CommonProfile]("operator"), (profile: CommonProfile) =>
       ServerServiceCall {

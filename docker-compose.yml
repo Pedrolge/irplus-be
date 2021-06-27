@@ -1,0 +1,66 @@
+version: "3.3"
+services:
+  mlflow_ftp:
+    container_name: mlflow_ftp
+    image: "fauria/vsftpd"
+    ports:
+      - 0.0.0.0:20:20
+      - 0.0.0.0:21:21
+      - 21100-21110:21100-21110
+    network_mode: host
+    volumes:
+      - /Data/volumes/ftp:/home/vsftpd
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASS=${FTP_PASS}
+      - PASV_ADDRESS=0.0.0.0
+  irplus_postgres:
+    container_name: irplus_postgres
+    image: postgres:9.6-alpine
+    ports:
+      - "5440:5432"
+    networks:
+      - backend
+      - keycloak_network
+    volumes:
+      - /Data/volumes/postgres/irplus:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: framework
+      POSTGRES_USER: framework
+      POSTGRES_PASSWORD: framework
+  mlflow_server:
+    restart: always
+    build: .
+    image: mlflow_server
+    container_name: mlflow_server
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    network_mode: host
+    command: mlflow server --backend-store-uri postgresql://mlflow:mlflow@localhost:5440/mlflow --default-artifact-root ftp://${FTP_USER}:${FTP_PASS}@localhost/test/ --host 0.0.0.0
+
+
+  keycloak:
+    container_name: irplus_keycloak
+    image: quay.io/keycloak/keycloak:13.0.1
+    network_mode: host
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=localhost
+      - DB_PORT=5440
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+      
+
+networks:
+    backend:
+        driver: bridge
+    keycloak_network:
+        driver: bridge
+        

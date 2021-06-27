@@ -10,6 +10,7 @@ import com.pedrolge.experiment.impl.repo.{ApiTokenRepository, PostgresComponent,
 import com.pedrolge.mlflow.api.MLFlowComponent
 import com.softwaremill.macwire._
 import org.pac4j.core.config.Config
+import play.api.Mode
 import play.api.libs.ws.ahc.AhcWSComponents
 
 
@@ -41,7 +42,8 @@ abstract class ExperimentApplication(context: LagomApplicationContext)
   val userRepository: UserRepository = wire[UserRepository]
   val apiTokenRepository: ApiTokenRepository = wire[ApiTokenRepository]
 
-//  this.runDBSetup()
+  if (environment.mode == Mode.Dev && config.getBoolean("postgres.drop-and-create-databases"))
+    this.runDBSetup()
 
 
   // Bind the service that this server provides

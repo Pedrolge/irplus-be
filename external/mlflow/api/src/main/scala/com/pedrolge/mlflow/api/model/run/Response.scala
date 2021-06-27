@@ -22,8 +22,8 @@ object Response {
   }
 
   case class SearchRunResponse(
-                                runs: Run,
-                                nextPageToken: String
+                                runs: Option[List[Run]],
+                                nextPageToken: Option[String]
                               )
 
   object SearchRunResponse extends MLFlowFormatter {

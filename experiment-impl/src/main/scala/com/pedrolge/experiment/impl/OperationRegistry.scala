@@ -4,7 +4,7 @@ import com.pedrolge.experiment.impl.operation.experiment._
 import com.pedrolge.experiment.impl.operation.run._
 import com.pedrolge.experiment.impl.operation.metric._
 import com.pedrolge.experiment.impl.operation.artifact._
-import com.pedrolge.experiment.impl.operation.auth.{CreateTokenOperation, ListTokenOperation}
+import com.pedrolge.experiment.impl.operation.auth.{CreateTokenOperation, DeleteTokenOperation, ListTokenOperation}
 import com.pedrolge.experiment.impl.operation.registeredModel._
 import com.pedrolge.experiment.impl.operation.modelVersion._
 import com.pedrolge.experiment.impl.repo.{ApiTokenRepository, UserRepository}
@@ -12,6 +12,7 @@ import com.pedrolge.mlflow.api.MLFlow
 
 trait OperationRegistry {
 
+  def deleteTokenOperation: DeleteTokenOperation
   def createTokenOperation: CreateTokenOperation
   def listTokenOperation: ListTokenOperation
 

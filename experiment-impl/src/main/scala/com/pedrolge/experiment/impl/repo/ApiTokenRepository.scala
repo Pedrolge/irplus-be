@@ -94,10 +94,11 @@ class ApiTokenRepository(val db: Database) extends Repository[ApiToken] {
     db.run(q)
   }
 
-  def delete(userId: String)(implicit context: ExecutionContext): Future[Int] = {
+  def delete(userId: String, tokenName: String)(implicit context: ExecutionContext): Future[Int] = {
     val q =
       apiTokens
         .filter(_.userId === userId)
+        .filter(_.name === tokenName)
         .delete
 
     db.run(q)

@@ -94,8 +94,8 @@ package object model {
                               name: String,
                               creationTimestamp: String,
                               lastUpdatedTimestamp: String,
-                              userId: String,
-                              description: String,
+                              userId: Option[String],
+                              description: Option[String],
                               latestVersions: List[ModelVersion],
                               tags: Option[List[RegisteredModelTag]]
                             )

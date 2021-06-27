@@ -30,6 +30,7 @@ object ExperimentService  {
   */
 trait ExperimentService extends Service {
 
+  def deleteToken(tokenName: String): ServiceCall[NotUsed, EmptyResponse]
   def createToken(): ServiceCall[CreateTokenRequest, CreateTokenResponse]
   def listToken(): ServiceCall[NotUsed, ListTokenResponse]
 
@@ -87,6 +88,7 @@ trait ExperimentService extends Service {
       .withCalls(
 
         // AUTH
+        restCall(Method.DELETE, "/api/auth/token/:token_name", deleteToken _),
         restCall(Method.POST, "/api/auth/token", createToken _),
         restCall(Method.GET, "/api/auth/token", listToken _),
 
@@ -128,7 +130,7 @@ trait ExperimentService extends Service {
         restCall(Method.DELETE, "/api/2.0/preview/mlflow/registered-models/delete", deleteRegisteredModel _),
         restCall(Method.GET, "/api/2.0/preview/mlflow/registered-models/list?max_results&page_token", listRegisteredModel _),
         restCall(Method.GET, "/api/2.0/preview/mlflow/registered-models/get-latest-versions?name&stages", getLatestVersions _),
-        restCall(Method.GET, "/api/2.0/preview/mlflow/registered-models/search", searchRegisteredModel _),
+        restCall(Method.POST, "/api/2.0/preview/mlflow/registered-models/search", searchRegisteredModel _),
         restCall(Method.GET, "/api/2.0/preview/mlflow/registered-models/set-tag", setRegisteredModelTag _),
         restCall(Method.GET, "/api/2.0/preview/mlflow/registered-models/delete-tag", deleteRegisteredModelTag _),
 
@@ -137,7 +139,7 @@ trait ExperimentService extends Service {
         restCall(Method.GET, "/api/2.0/preview/mlflow/model-versions/get?name&version", getModelVersion _),
         restCall(Method.PATCH, "/api/2.0/preview/mlflow/model-versions/update", updateModelVersion _),
         restCall(Method.POST, "/api/2.0/preview/mlflow/model-versions/delete", deleteModelVersion _),
-        restCall(Method.GET, "/api/2.0/preview/mlflow/model-versions/search", searchModelVersion _),
+        restCall(Method.POST, "/api/2.0/preview/mlflow/model-versions/search", searchModelVersion _),
         restCall(Method.GET, "/api/2.0/preview/mlflow/model-versions/get-download-uri?name&version", getModelVersionDownloadUri _),
         restCall(Method.POST, "/api/2.0/preview/mlflow/model-versions/transition-stage", transitionModelVersionStage _),
         restCall(Method.POST, "/api/2.0/preview/mlflow/model-versions/set-tag", setModelVersionTag _),
